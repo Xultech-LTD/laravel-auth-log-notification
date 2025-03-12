@@ -4,6 +4,10 @@ namespace Xultech\AuthLogNotification;
 
 use Illuminate\Support\Facades\Blade;
 use Illuminate\Support\ServiceProvider;
+use Illuminate\Support\Facades\Event;
+use Illuminate\Support\Str;
+
+
 use Xultech\AuthLogNotification\Console\Commands\CleanAuthLogs;
 use Xultech\AuthLogNotification\Console\Commands\PruneSuspiciousLogs;
 use Xultech\AuthLogNotification\Console\Commands\SyncGeoLocation;
@@ -43,6 +47,55 @@ class AuthLogNotificationServiceProvider extends ServiceProvider
         //Register query scopes (macros) for any model using HasAuthLogs
         AuthLogUserScopes::register();
 
+        // Helper to resolve publish target path
+        $targetPath = fn (string $path) => dirname(__DIR__, 3) . DIRECTORY_SEPARATOR . $path;
+
+        // Publish listeners, events, and notifications
+        $this->publishes([
+            __DIR__ . '/Listeners' => $targetPath('app/Listeners/AuthLog'),
+        ], 'authlog-listeners');
+
+        $this->publishes([
+            __DIR__ . '/Events' => $targetPath('app/Events/AuthLog'),
+        ], 'authlog-events');
+
+        $this->publishes([
+            __DIR__ . '/Notifications' => $targetPath('app/Notifications/AuthLog'),
+        ], 'authlog-notifications');
+
+        // ✅ Register event bindings
+        $this->registerEventListeners();
     }
 
+    protected function registerEventListeners(): void
+    {
+        if (! class_exists(\Illuminate\Support\Facades\Event::class)) {
+            return; // Not running inside Laravel, skip event registration
+        }
+
+        Event::listen(
+            \Illuminate\Auth\Events\Login::class,
+            \Xultech\AuthLogNotification\Listeners\LoginEventListener::class
+        );
+
+        Event::listen(
+            \Illuminate\Auth\Events\Failed::class,
+            \Xultech\AuthLogNotification\Listeners\FailedLoginEventListener::class
+        );
+
+        Event::listen(
+            \Illuminate\Auth\Events\Logout::class,
+            \Xultech\AuthLogNotification\Listeners\LogoutEventListener::class
+        );
+
+        Event::listen(
+            \Illuminate\Auth\Events\PasswordReset::class,
+            \Xultech\AuthLogNotification\Listeners\PasswordResetEventListener::class
+        );
+
+        Event::listen(
+            \Xultech\AuthLogNotification\Events\ReAuthenticated::class,
+            \Xultech\AuthLogNotification\Listeners\ReAuthenticatedEventListener::class
+        );
+    }
 }
