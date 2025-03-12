@@ -36,11 +36,11 @@ class LoginRateLimiter
 
         // Increment attempts and store timestamp
         $attempts = Cache::increment($attemptKey);
-        Cache::put($attemptKey . ':timestamp', now(), now()->addMinutes($config['lockout_minutes']));
+        Cache::put($attemptKey . ':timestamp', Carbon::now(), Carbon::now()->addMinutes($config['lockout_minutes']));
 
         // If max attempts exceeded, lock the user out
         if ($attempts >= $config['max_attempts']) {
-            Cache::put($lockKey, true, now()->addMinutes($config['lockout_minutes']));
+            Cache::put($lockKey, true, Carbon::now()->addMinutes($config['lockout_minutes']));
         }
     }
 
@@ -125,4 +125,16 @@ class LoginRateLimiter
         $prefix = Config::get('authlog.lockout.key_prefix', 'authlog:lockout:');
         return $prefix . 'locked:' . sha1($identifier);
     }
+
+    /**
+     * Alias for isLockedOut() to match expected method name from older versions.
+     *
+     * @param string $identifier
+     * @return bool
+     */
+    public static function tooManyAttempts(string $identifier): bool
+    {
+        return self::isLockedOut($identifier);
+    }
+
 }
