@@ -10,6 +10,7 @@
 
     - **IP Address:** {{ $log->ip_address }}
     - **Location:** {{ $log->formatted_location }}
+
     - **Device:** {{ $log->device_summary }}
     - **Time:** {{ $log->login_at_formatted }}
 
