@@ -61,7 +61,7 @@ class PasswordResetEventListener
         $user->authentications()->save($log);
 
         // Trigger custom hook
-        HookExecutor::run('on_password_reset', [
+        App::make(HookExecutor::class)->run('on_password_reset', [
             'user' => $user,
             'auth_log' => $log,
             'request' => $request,

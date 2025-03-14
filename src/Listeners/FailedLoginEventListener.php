@@ -61,14 +61,14 @@ class FailedLoginEventListener
             'session_id' => null,
         ]);
 
-        // Resolve lockout identifier (IP, email, or both)
-        $identifier = LoginRateLimiter::resolveIdentifier($request, $email);
+        // Resolve and register with rate limiter
+        $limiter = App::make(LoginRateLimiter::class);
+        $identifier = $limiter->resolveIdentifier($request, $email);
+        $limiter->registerFailure($identifier);
 
-        // Register failed login attempt
-        LoginRateLimiter::registerFailure($identifier);
 
         // Trigger user-defined hook
-        HookExecutor::run('on_failed', [
+        App::make(HookExecutor::class)->run('on_failed', [
             'email' => $email,
             'ip' => $ip,
             'user_agent' => $userAgent,

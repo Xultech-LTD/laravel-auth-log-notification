@@ -1,8 +1,3 @@
-@php
-    $user = auth()->user();
-    $logins = $user?->logins($count ?? 5);
-@endphp
-
 @if ($logins && $logins->count())
     <table class="w-full text-sm border">
         <thead class="bg-gray-100 text-left">

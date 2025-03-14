@@ -95,7 +95,7 @@ class LoginEventListener
         }
 
         // Trigger custom hook (e.g., for auditing, custom logging)
-        HookExecutor::run('on_login', [
+        App::make(HookExecutor::class)->run('on_login', [
             'user' => $user,
             'auth_log' => $log,
             'request' => $request,

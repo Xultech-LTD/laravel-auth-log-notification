@@ -9,6 +9,7 @@ use Illuminate\Support\Facades\Config;
 use Xultech\AuthLogNotification\Models\AuthLog;
 use Illuminate\Notifications\Messages\VonageMessage;
 
+
 /**
  * Notification sent when a new login is detected.
  *
@@ -17,7 +18,7 @@ use Illuminate\Notifications\Messages\VonageMessage;
  * - Slack
  * - SMS via Vonage (but still referred to as 'nexmo' in config for compatibility)
  */
-class LoginAlertNotification
+class LoginAlertNotification extends Notification
 {
     public function __construct(public AuthLog $log) {}
 

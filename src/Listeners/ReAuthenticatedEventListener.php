@@ -53,7 +53,7 @@ class ReAuthenticatedEventListener
 
         $user->authentications()->save($log);
 
-        HookExecutor::run('on_re_authenticated', [
+        App::make(HookExecutor::class)->run('on_re_authenticated', [
             'user' => $user,
             'auth_log' => $log,
             'request' => $request,

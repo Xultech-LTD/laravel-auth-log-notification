@@ -33,14 +33,14 @@ class GeoLocationService
                 'country'         => $location->country ?? null,
                 'country_code'    => $location->iso_code ?? null,
                 'state'           => $location->state ?? null,
-                'state_code'      => $location->state_code ?? null,
+                'state_code'      =>  null,
                 'city'            => $location->city ?? null,
                 'postal_code'     => $location->postal_code ?? null,
                 'latitude'        => $location->lat ?? null,
                 'longitude'       => $location->lon ?? null,
                 'timezone'        => $location->timezone ?? null,
                 'continent'       => $location->continent ?? null,
-                'continent_code'  => $location->continent_code ?? null,
+                'continent_code'  =>  null,
                 'raw'             => $location->toArray() ?? [],
             ];
         } catch (\Throwable $e) {

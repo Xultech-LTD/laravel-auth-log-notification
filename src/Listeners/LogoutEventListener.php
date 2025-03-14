@@ -4,6 +4,7 @@ namespace Xultech\AuthLogNotification\Listeners;
 
 use Carbon\Carbon;
 use Illuminate\Auth\Events\Logout;
+use Illuminate\Support\Facades\App;
 use Illuminate\Support\Facades\Config;
 use Illuminate\Support\Facades\Session;
 use Xultech\AuthLogNotification\Models\AuthLog;
@@ -57,7 +58,7 @@ class LogoutEventListener
         ]);
 
         // Optionally trigger a logout hook
-        HookExecutor::run('on_logout', [
+        App::make(HookExecutor::class)->run('on_logout', [
             'user' => $user,
             'auth_log' => $log,
             'session_id' => $sessionId,

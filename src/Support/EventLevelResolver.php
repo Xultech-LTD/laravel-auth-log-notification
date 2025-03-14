@@ -59,6 +59,7 @@ class EventLevelResolver
      */
     public static function label(?string $value): string
     {
+
         if (self::enumSupported()) {
             try {
                 return AuthEventLevelEnum::from($value)->label();

@@ -71,7 +71,7 @@ class SessionHijackDetected extends Notification
                     'User Agent' => $this->userAgent ?? 'Unknown',
                     'Location' => $this->location ?? 'Unknown',
                     'Route' => $this->route ?? 'N/A',
-                    'Time' => now()->toDateTimeString(),
+                    'Time' => Carbon::now()->toDateTimeString(),
                 ]);
             });
     }
