@@ -14,6 +14,7 @@ use Xultech\AuthLogNotification\Support\EventLevelResolver;
 use Xultech\AuthLogNotification\Support\HookExecutor;
 use Illuminate\Support\Facades\Request;
 use Illuminate\Support\Str;
+use Xultech\AuthLogNotification\Support\LoginBlocker;
 
 class LoginEventListener
 {
@@ -83,6 +84,12 @@ class LoginEventListener
 
         if ($hasLogs) {
             $user->authentications()->save($log);
+
+            // 🛡️ Automatically block if suspicious and configured
+            if ($response = LoginBlocker::maybeBlock($log, $request)) {
+                $response->send(); // return the blocking response
+                exit; // stop execution to prevent login continuation
+            }
         }
 
         // Optionally notify user of login (if configured)
