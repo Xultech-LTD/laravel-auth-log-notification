@@ -288,4 +288,22 @@ trait HasAuthLogs
     {
         return $this->activeSessions()->count() > 1;
     }
+
+    /**
+     * Determine whether the user should receive a login notification.
+     *
+     * @param \Xultech\AuthLogNotification\Models\AuthLog $log
+     * @return bool
+     */
+    public function shouldReceiveLoginNotification(AuthLog $log): bool
+    {
+        $onlySuspicious = config('authlog.notification.only_on_suspicious_activity', true);
+
+        if (! $onlySuspicious) {
+            return true;
+        }
+
+        return $log->is_suspicious;
+    }
+
 }

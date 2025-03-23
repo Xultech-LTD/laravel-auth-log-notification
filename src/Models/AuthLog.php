@@ -213,6 +213,17 @@ class AuthLog extends Model
         return $this->user_agent ? substr($this->user_agent, 0, 80) . '...' : null;
     }
 
+    /**
+     * Accessor: Determine if this login is suspicious.
+     *
+     * @return bool
+     */
+    public function getIsSuspiciousAttribute(): bool
+    {
+        return $this->isSuspicious();
+    }
+
+
     /*
     |--------------------------------------------------------------------------
     | Output Formatting
