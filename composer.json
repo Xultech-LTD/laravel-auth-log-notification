@@ -8,7 +8,6 @@
         "jenssegers/agent": "^2.6",
         "torann/geoip": "^1.0",
         "laravel/slack-notification-channel": "^3.5",
-        "illuminate/config": "^12.1",
         "laravel/vonage-notification-channel": "^3.3"
     },
     "license": "MIT",
@@ -50,7 +49,8 @@
         "illuminate/events": "^12.2",
         "mockery/mockery": "^1.6",
         "illuminate/cookie": "^12.2",
-        "illuminate/hashing": "^12.2"
+        "illuminate/hashing": "^12.2",
+        "illuminate/config": "^12.1"
     },
     "config": {
         "allow-plugins": {
