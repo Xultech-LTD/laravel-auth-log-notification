@@ -210,5 +210,39 @@ return [
         'redirect_to' => '/login',
     ],
 
+    /*
+    |--------------------------------------------------------------------------
+    | Suspicious Login Blocking via Middleware (Pre-Auth)
+    |--------------------------------------------------------------------------
+    |
+    | This section controls whether login requests should be blocked before
+    | authentication is attempted — based on suspicious device or location.
+    |
+    | If enabled, the package will:
+    | - Attempt to find the user based on the provided email
+    | - Compare the login request (IP/device) with past AuthLog records
+    | - If the device or location is new, and blocking is configured, it will
+    |   immediately stop the request using the configured handler.
+    |
+    | This is useful for protecting routes like /login from unknown devices
+    | even before Laravel processes authentication.
+    |
+    */
+
+    'middleware_blocking' => [
+
+        // Enable or disable the middleware
+        'enabled' => true,
+
+        // The Eloquent model class used to identify the user (e.g., App\Models\User::class)
+        'user_model' => 'App\\Models\\User',
+
+        // The column used to look up the user (e.g., 'email', 'username')
+        'email_column' => 'email',
+
+        // The input key in the login form (e.g., 'email', 'login', 'identifier')
+        'request_input_key' => 'email',
+    ],
+
 
 ];

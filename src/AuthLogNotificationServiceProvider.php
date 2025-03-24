@@ -6,13 +6,15 @@ use Illuminate\Support\Facades\Blade;
 use Illuminate\Support\ServiceProvider;
 use Illuminate\Support\Facades\Event;
 use Illuminate\Support\Str;
-
-
 use Xultech\AuthLogNotification\Console\Commands\CleanAuthLogs;
 use Xultech\AuthLogNotification\Console\Commands\PruneSuspiciousLogs;
 use Xultech\AuthLogNotification\Console\Commands\SyncGeoLocation;
+use Xultech\AuthLogNotification\Http\Middleware\BlockSuspiciousLoginAttempt;
+use Xultech\AuthLogNotification\Http\Middleware\EnforceLoginRateLimit;
+use Xultech\AuthLogNotification\Http\Middleware\VerifySessionFingerprint;
 use Xultech\AuthLogNotification\Support\AuthLogUserScopes;
 use Xultech\AuthLogNotification\Support\PathHelper;
+
 
 class AuthLogNotificationServiceProvider extends ServiceProvider
 {
@@ -28,6 +30,27 @@ class AuthLogNotificationServiceProvider extends ServiceProvider
 
     public function boot(): void
     {
+        // Register middleware aliases ONLY inside a Laravel application
+        $this->app->booted(function () {
+            if (class_exists('Illuminate\\Routing\\Router')) {
+                $router = $this->app->make('router');
+
+                if (method_exists($router, 'aliasMiddleware')) {
+                    $router->aliasMiddleware('authlog.enforce-lockout', EnforceLoginRateLimit::class);
+                    $router->aliasMiddleware('authlog.block-suspicious', BlockSuspiciousLoginAttempt::class);
+                    $router->aliasMiddleware('authlog.verify-session', VerifySessionFingerprint::class);
+                }
+            }
+        });
+
+        // Publish all middleware classes to app/Http/Middleware/AuthLog
+        $this->publishes([
+            __DIR__ . '/Http/Middleware/EnforceLoginRateLimit.php' => PathHelper::publishMiddlewarePath($this->app) . '/EnforceLoginRateLimit.php',
+            __DIR__ . '/Http/Middleware/BlockSuspiciousLoginAttempt.php' => PathHelper::publishMiddlewarePath($this->app) . '/BlockSuspiciousLoginAttempt.php',
+            __DIR__ . '/Http/Middleware/VerifySessionFingerprint.php' => PathHelper::publishMiddlewarePath($this->app) . '/VerifySessionFingerprint.php',
+        ], 'authlog-middleware');
+
+
         // Load package views (default namespace)
         $this->loadViewsFrom(__DIR__ . '/../../resources/views', 'authlog');
 
