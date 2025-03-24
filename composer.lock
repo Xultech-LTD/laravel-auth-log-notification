@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "1b669f749b05dc9ea57696d9cab6aae8",
+    "content-hash": "ad3f8b3faaa54af6913135415bbbf7c4",
     "packages": [
         {
             "name": "brick/math",
@@ -5905,7 +5905,7 @@
         },
         {
             "name": "torann/geoip",
-            "version": "dev-master",
+            "version": "3.0.9",
             "source": {
                 "type": "git",
                 "url": "https://github.com/Torann/laravel-geoip.git",
@@ -5935,7 +5935,6 @@
                 "geoip2/geoip2": "Required to use the MaxMind database or web service with GeoIP (~2.1).",
                 "monolog/monolog": "Allows for storing location not found errors to the log"
             },
-            "default-branch": true,
             "type": "library",
             "extra": {
                 "laravel": {
