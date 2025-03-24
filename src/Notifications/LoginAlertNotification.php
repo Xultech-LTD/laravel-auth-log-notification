@@ -57,14 +57,21 @@ class LoginAlertNotification extends Notification
         $subject = Config::get('authlog.default_notification.subject', 'New Login Detected');
         $view = Config::get('authlog.default_notification.mail_view', 'authlog::mail.login-alert');
         $from = Config::get('authlog.default_notification.mail_from', 'no-reply@example.com');
+        $viewType  = config('authlog.default_notification.view_type', 'markdown');
 
-        return (new MailMessage)
+        $mail = (new MailMessage)
             ->from($from)
-            ->subject($subject)
-            ->view($view, [
-                'log' => $this->log,
-                'user' => $notifiable,
-            ]);
+            ->subject($subject);
+
+        $data = [
+            'log' => $this->log,
+            'user' => $notifiable,
+        ];
+
+        return $viewType === 'markdown'
+            ? $mail->markdown($view, $data)
+            : $mail->view($view, $data);
+
     }
     /**
      * Build the Slack representation.

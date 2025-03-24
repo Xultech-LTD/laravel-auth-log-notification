@@ -53,6 +53,7 @@ return [
         'slack_channel' => '#security-alerts',
         'mail_from' => env('MAIL_FROM_ADDRESS', 'no-reply@example.com'),
         'mail_view' => 'authlog::mail.login-alert', // or 'authlog::mail.login-alert-html'
+        'view_type' => 'markdown', // or 'html'
     ],
 
     /*
