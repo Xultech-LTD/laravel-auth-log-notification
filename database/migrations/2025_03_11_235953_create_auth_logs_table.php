@@ -11,7 +11,7 @@ return new class extends Migration {
             $table->id();
 
             // Polymorphic relationship to any authenticatable model
-            $table->morphs('authenticatable');
+            $table->nullableMorphs('authenticatable');
 
             // IP and location data
             $table->ipAddress('ip_address')->nullable();

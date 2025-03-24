@@ -184,7 +184,7 @@ return [
     'suspicion_rules' => [
         'new_device' => true,
         'new_location' => true,
-        'block_suspicious_logins' => false,
+        'block_suspicious_logins' => true,
     ],
 
     'suspicious_login_handler' => \Xultech\AuthLogNotification\Handlers\SuspiciousLoginHandler::class,
@@ -235,8 +235,8 @@ return [
         // Enable or disable the middleware
         'enabled' => true,
 
-        // The Eloquent model class used to identify the user (e.g., App\Models\User::class)
-        'user_model' => "Tests\\Stubs\\UserStub",
+        // The Eloquent model class used to identify the user (e.g., App\Models\User)
+        'user_model' => "App\\Models\\User",
 
         // The column used to look up the user (e.g., 'email', 'username')
         'email_column' => 'email',

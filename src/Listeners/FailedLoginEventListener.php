@@ -41,10 +41,11 @@ class FailedLoginEventListener
 
         $location = App::make(GeoLocationService::class)->getGeoData($ip);
 
+        $user = $event->user;
         // Log to auth_logs table
         AuthLog::create([
-            'authenticatable_type' => null,
-            'authenticatable_id' => null,
+            'authenticatable_type' => $user ? get_class($user) : null,
+            'authenticatable_id' => $user?->getAuthIdentifier(),
             'ip_address' => $ip,
             'country' => $location['country'] ?? null,
             'city' => $location['city'] ?? null,

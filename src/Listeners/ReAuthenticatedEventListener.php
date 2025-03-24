@@ -35,6 +35,8 @@ class ReAuthenticatedEventListener
         $location = App::make( GeoLocationService::class)->getGeoData($ip);
 
         $log = new AuthLog([
+            'authenticatable_type' => $user ? get_class($user) : null,
+            'authenticatable_id' => $user?->getAuthIdentifier(),
             'ip_address' => $ip,
             'country' => $location['country'] ?? null,
             'city' => $location['city'] ?? null,

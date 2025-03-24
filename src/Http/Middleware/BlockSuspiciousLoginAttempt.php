@@ -11,6 +11,7 @@ use Symfony\Component\HttpFoundation\Response;
 use Xultech\AuthLogNotification\Models\AuthLog;
 use Xultech\AuthLogNotification\Services\GeoLocation\GeoLocationService;
 use Xultech\AuthLogNotification\Services\SuspicionDetector;
+use Xultech\AuthLogNotification\Support\EventLevelResolver;
 
 class BlockSuspiciousLoginAttempt
 {
@@ -63,11 +64,13 @@ class BlockSuspiciousLoginAttempt
         $hasUsedIp = AuthLog::where('authenticatable_type', $userType)
             ->where('authenticatable_id', $user->id)
             ->where('ip_address', $ip)
+            ->where('event_level', EventLevelResolver::resolve('login'))
             ->exists();
 
         $hasUsedAgent = AuthLog::where('authenticatable_type', $userType)
             ->where('authenticatable_id', $user->id)
             ->where('user_agent', $userAgent)
+            ->where('event_level', EventLevelResolver::resolve('login'))
             ->exists();
 
         $isNewDevice = ! $hasUsedAgent;

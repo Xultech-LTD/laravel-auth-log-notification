@@ -2,6 +2,7 @@
 
 namespace Xultech\AuthLogNotification\Notifications;
 
+use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Notifications\Notification;
 use Illuminate\Notifications\Messages\MailMessage;
 use Illuminate\Notifications\Messages\SlackMessage;
@@ -18,7 +19,7 @@ use Illuminate\Notifications\Messages\VonageMessage;
  * - Slack
  * - SMS via Vonage (but still referred to as 'nexmo' in config for compatibility)
  */
-class LoginAlertNotification extends Notification
+class LoginAlertNotification extends Notification implements ShouldQueue
 {
     public function __construct(public AuthLog $log) {}
 

@@ -34,9 +34,19 @@ class LoginRateLimiter
         $attemptKey = self::getAttemptKey($identifier);
         $lockKey = self::getLockKey($identifier);
 
-        // Increment attempts and store timestamp
-        $attempts = Cache::increment($attemptKey);
-        Cache::put($attemptKey . ':timestamp', Carbon::now(), Carbon::now()->addMinutes($config['lockout_minutes']));
+        $key = $attemptKey . ':timestamp';
+        $ttl = Carbon::now()->addMinutes($config['lockout_minutes']);
+
+        // Get the current value and TTL (if supported)
+        if (! Cache::has($key)) {
+            // Key expired or doesn't exist — restart counter
+            Cache::put($key, 1, $ttl);
+            $attempts = 1;
+        } else {
+            // Increment and refresh expiry
+            $attempts = Cache::increment($key);
+            Cache::put($key, $attempts, $ttl);
+        }
 
         // If max attempts exceeded, lock the user out
         if ($attempts >= $config['max_attempts']) {

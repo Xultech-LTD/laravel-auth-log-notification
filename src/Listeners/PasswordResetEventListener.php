@@ -42,6 +42,8 @@ class PasswordResetEventListener
 
         // Create auth log
         $log = new AuthLog([
+            'authenticatable_type' => $user ? get_class($user) : null,
+            'authenticatable_id' => $user?->getAuthIdentifier(),
             'ip_address' => $ip,
             'country' => $location['country'] ?? null,
             'city' => $location['city'] ?? null,
