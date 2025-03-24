@@ -35,6 +35,10 @@ class AuthLogNotificationServiceProvider extends ServiceProvider
             __DIR__ . '/../config/authlog.php' => config_path('authlog.php'),
         ], 'authlog-config');
 
+        // Publish the migration file
+        $this->publishesMigrations([
+            __DIR__.'/../database/migrations/2025_03_11_235953_create_auth_logs_table.php'
+        ],'migrations');
 
         // Register middleware aliases ONLY inside a Laravel application
         $this->app->booted(function () {
@@ -79,7 +83,7 @@ class AuthLogNotificationServiceProvider extends ServiceProvider
         // Publish all views (markdown + html + components)
         $this->publishes([
             __DIR__ . '/../resources/views' => PathHelper::publishPath($this->app),
-        ], 'views');
+        ], 'authlog-views');
 
         // Publish only Blade components
         $this->publishes([
@@ -88,7 +92,6 @@ class AuthLogNotificationServiceProvider extends ServiceProvider
 
         //Register query scopes (macros) for any model using HasAuthLogs
         AuthLogUserScopes::register();
-
 
         // ✅ Register event bindings
         $this->registerEventListeners();
