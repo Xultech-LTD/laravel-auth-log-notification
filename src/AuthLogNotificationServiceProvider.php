@@ -33,12 +33,12 @@ class AuthLogNotificationServiceProvider extends ServiceProvider
         // Publish the config file
         $this->publishes([
             __DIR__ . '/../config/authlog.php' => config_path('authlog.php'),
-        ], 'config');
+        ], 'auth-config');
 
         // Publish the migration file
         $this->publishesMigrations([
             __DIR__.'/../database/migrations/2025_03_11_235953_create_auth_logs_table.php'
-        ],'migrations');
+        ],'auth-migrations');
 
         // Register middleware aliases ONLY inside a Laravel application
         $this->app->booted(function () {
