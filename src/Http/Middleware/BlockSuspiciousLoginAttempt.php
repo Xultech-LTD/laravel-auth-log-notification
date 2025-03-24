@@ -85,7 +85,7 @@ class BlockSuspiciousLoginAttempt
             'metadata'        => $geoData,
         ]);
 
-        // Evaluate and block if login is suspicious
+        // Evaluate login suspicion using config flags
         if (SuspicionDetector::isSuspicious($log)) {
             $handlerClass = Config::get('authlog.suspicious_login_handler');
             $handler = App::make($handlerClass);

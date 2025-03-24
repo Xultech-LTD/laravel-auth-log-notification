@@ -17,6 +17,7 @@ class SuspicionDetector
     {
         $rules = Config::get('authlog.suspicion_rules', []);
 
+
         return
             (!empty($rules['new_device']) && $log->is_new_device) ||
             (!empty($rules['new_location']) && $log->is_new_location);

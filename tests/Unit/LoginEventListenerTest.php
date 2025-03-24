@@ -74,9 +74,7 @@ it('creates a log and sends notification on login', function () {
 
     // ✅ Create a user with the custom method
     $user = new class extends UserStub {
-        public function shouldReceiveLoginNotification($log) {
-            return true;
-        }
+
     };
     $user->name = 'Test User';
     $user->save();

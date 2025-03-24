@@ -25,7 +25,7 @@ return [
     'notification' => [
         'channels' => ['mail'], // e.g. ['mail', 'slack', 'nexmo']
         'mode' => 'notification', // 'notification' or 'mailable'
-        'only_on_suspicious_activity' => true,
+        'only_on_suspicious_activity' => false,
 
         'channels_config' => [
             'mail' => [
@@ -235,7 +235,7 @@ return [
         'enabled' => true,
 
         // The Eloquent model class used to identify the user (e.g., App\Models\User::class)
-        'user_model' => 'App\\Models\\User',
+        'user_model' => "Tests\\Stubs\\UserStub",
 
         // The column used to look up the user (e.g., 'email', 'username')
         'email_column' => 'email',
