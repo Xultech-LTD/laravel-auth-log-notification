@@ -36,5 +36,25 @@ class PathHelper
         // Fallback for standalone environments
         return dirname(__DIR__, 2) . '/app/Http/Middleware/AuthLog';
     }
+    public static function publishListenerPath(Application $app): string
+    {
+        return method_exists($app, 'basePath')
+            ? $app->basePath('app/Listeners/AuthLog')
+            : dirname(__DIR__, 2) . '/app/Listeners/AuthLog';
+    }
+
+    public static function publishEventPath(Application $app): string
+    {
+        return method_exists($app, 'basePath')
+            ? $app->basePath('app/Events/AuthLog')
+            : dirname(__DIR__, 2) . '/app/Events/AuthLog';
+    }
+
+    public static function publishNotificationPath(Application $app): string
+    {
+        return method_exists($app, 'basePath')
+            ? $app->basePath('app/Notifications/AuthLog')
+            : dirname(__DIR__, 2) . '/app/Notifications/AuthLog';
+    }
 
 }

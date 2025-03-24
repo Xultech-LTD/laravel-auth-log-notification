@@ -30,6 +30,12 @@ class AuthLogNotificationServiceProvider extends ServiceProvider
 
     public function boot(): void
     {
+        // Publish the config file
+        $this->publishes([
+            __DIR__ . '/../config/authlog.php' => config_path('authlog.php'),
+        ], 'authlog-config');
+
+
         // Register middleware aliases ONLY inside a Laravel application
         $this->app->booted(function () {
             if (class_exists('Illuminate\\Routing\\Router')) {
@@ -49,6 +55,19 @@ class AuthLogNotificationServiceProvider extends ServiceProvider
             __DIR__ . '/Http/Middleware/BlockSuspiciousLoginAttempt.php' => PathHelper::publishMiddlewarePath($this->app) . '/BlockSuspiciousLoginAttempt.php',
             __DIR__ . '/Http/Middleware/VerifySessionFingerprint.php' => PathHelper::publishMiddlewarePath($this->app) . '/VerifySessionFingerprint.php',
         ], 'authlog-middleware');
+
+        // Publish listeners, events, and notifications
+        $this->publishes([
+            __DIR__ . '/Listeners' => PathHelper::publishListenerPath($this->app),
+        ], 'authlog-listeners');
+
+        $this->publishes([
+            __DIR__ . '/Events' => PathHelper::publishEventPath($this->app),
+        ], 'authlog-events');
+
+        $this->publishes([
+            __DIR__ . '/Notifications' => PathHelper::publishNotificationPath($this->app),
+        ], 'authlog-notifications');
 
 
         // Load package views (default namespace)
@@ -70,21 +89,6 @@ class AuthLogNotificationServiceProvider extends ServiceProvider
         //Register query scopes (macros) for any model using HasAuthLogs
         AuthLogUserScopes::register();
 
-        // Helper to resolve publish target path
-        $targetPath = fn (string $path) => dirname(__DIR__, 3) . DIRECTORY_SEPARATOR . $path;
-
-        // Publish listeners, events, and notifications
-        $this->publishes([
-            __DIR__ . '/Listeners' => $targetPath('app/Listeners/AuthLog'),
-        ], 'authlog-listeners');
-
-        $this->publishes([
-            __DIR__ . '/Events' => $targetPath('app/Events/AuthLog'),
-        ], 'authlog-events');
-
-        $this->publishes([
-            __DIR__ . '/Notifications' => $targetPath('app/Notifications/AuthLog'),
-        ], 'authlog-notifications');
 
         // ✅ Register event bindings
         $this->registerEventListeners();
