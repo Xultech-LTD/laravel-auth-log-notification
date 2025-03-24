@@ -33,7 +33,7 @@ class AuthLogNotificationServiceProvider extends ServiceProvider
         // Publish the config file
         $this->publishes([
             __DIR__ . '/../config/authlog.php' => config_path('authlog.php'),
-        ], 'authlog-config');
+        ], 'config');
 
         // Publish the migration file
         $this->publishesMigrations([
