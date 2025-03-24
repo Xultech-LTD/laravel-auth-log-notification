@@ -35,10 +35,13 @@ class AuthLogNotificationServiceProvider extends ServiceProvider
             __DIR__ . '/../config/authlog.php' => config_path('authlog.php'),
         ], 'authlog-config');
 
-        // Publish the migration file
+        // Register and publish migrations
+        $this->loadMigrationsFrom(__DIR__ . '/../database/migrations');
+
         $this->publishes([
-            __DIR__.'/../database/migrations/2025_03_11_235953_create_auth_logs_table.php'=>self::publishableMigrationPaths()
-        ]);
+            __DIR__ . '/../database/migrations' => database_path('migrations'),
+        ], 'authlog-migrations');
+
 
 
         // Register middleware aliases ONLY inside a Laravel application
